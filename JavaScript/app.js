@@ -3,8 +3,12 @@ window.addEventListener("keydown", function(e) {
         e.preventDefault();
     }
 }, false);
-let game = true;
 
+let score = 0;
+const bird = {
+    x: 1,
+    y: 5,
+}
 $('#start-game').on('click', (e)=>{
     (e.currentTarget).remove();
     makeBoard();
@@ -17,16 +21,16 @@ $('#start-game').on('click', (e)=>{
         if(e.keyCode === 40){
             moveDown();
     }}); 
-    if(game === true){
-        setInterval(createBar, 3000)
-    } 
+    setInterval(createBar, 3000)
+    
+    $('.score').text(`score: ${score}`);
        
 }) 
-
 const gameOver = () => {
     if($('#bird').hasClass('dodge-bar')){
-        console.log('game over')
         game = false;
+        $('.game').empty();
+        $('game').append(``)
     } 
 }
 const makeBird = () => {
@@ -53,15 +57,13 @@ const createBar = () =>{
             $(`.square-${bar.x}-${i+1}`).addClass('hole');
         }
     }
-    gameOver();
     setInterval(()=>{
-        bar.move();
+        if(bar.x > 0){
+            bar.move();
+        } else 
+       
+        gameOver();
     }, 600) 
-}
-
-const bird = {
-    x: 1,
-    y: 5,
 }
 const moveUp = () => {
     if(bird.y < 10){
@@ -85,23 +87,16 @@ class DodgeBar  {
     this.hole = hole;
     } 
     move(){
-        if (this.x > 0){
-            this.x--;
-            for (let i = 0; i < 10; i++){
-                if((i+1)!== this.hole){
-                    
-                    $(`.square-${this.x + 1}-${i+1}`).removeClass('dodge-bar');;
-                    $(`.square-${this.x + 1}-${i+1}`).addClass('hole');;
-                    $(`.square-${this.x}-${i+1}`).removeClass('hole');;
-                    $(`.square-${this.x}-${i+1}`).addClass('dodge-bar');
-                } else {
-                    
-                    $(`.square-${this.x}-${i+1}`).removeClass('dodge-bar');
-                    $(`.square-${this.x}-${i+1}`).addClass('hole');
-                }  
-            }   
+        this.x--;
+        for (let i = 0; i < 10; i++){
+            if((i+1)!== this.hole){
+                $(`.square-${this.x + 1}-${i+1}`).removeClass('dodge-bar');;
+                $(`.square-${this.x + 1}-${i+1}`).addClass('hole');;
+                $(`.square-${this.x}-${i+1}`).removeClass('hole');;
+                $(`.square-${this.x}-${i+1}`).addClass('dodge-bar');
+            }  
         }   
-    }
+    } 
 }
 
 
