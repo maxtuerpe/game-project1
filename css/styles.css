@@ -1,0 +1,41 @@
+h1 {
+    border-style: solid;
+    border-width: 5px;
+    border-color: green;
+    display: inline;
+}
+header {
+    border-style: solid;
+    border-width: 5px;
+    border-color: green;
+}
+.square {
+    height: 3.5em;
+    width: 3.5em;
+    /* margin: 1px; */
+}
+.game-column {
+    display: inline-block;
+}
+.game {
+    background-image: url("https://i.ytimg.com/vi/Sv8HPkt-RaY/maxresdefault.jpg")
+}
+.title{
+    margin-left: 5em;
+}
+.score{
+    margin-right: 5em;
+}
+#bird {
+    background-repeat: no-repeat;
+    background-size: 100%;
+    background-image: url("https://vignette.wikia.nocookie.net/puffleville/images/2/26/Yellow_Bird_Sprite.png/revision/latest?cb=20120504215330");
+}
+.dodge-bar {
+    background-image: url("../img/crate.jpg");
+    background-size: 100%;
+}
+
+
+
+
