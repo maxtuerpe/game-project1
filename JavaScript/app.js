@@ -22,7 +22,6 @@ $('#start-game').on('click', (e)=>{
         if(e.keyCode === 40){
             moveDown();
     }});
-    setInterval(levelUp, 10000) 
     setInterval(()=>{
         if(game){
             createBar();
@@ -32,14 +31,14 @@ $('#start-game').on('click', (e)=>{
         scoreIncrease();
         $('.score').text(`score: ${score}`);
     }, 600/gameSpeed)
+    setInterval(()=>{
+        setTimeout (levelUp, );
+    },30000)
        
 }) 
 const levelUp = () => {
-    if (score % 5 === 0){
-        gameSpeed+= 3;
-    }
+    gameSpeed+= .2;
 }
-
 const gameOver = () => {
     if($('#bird').hasClass('dodge-bar')){
         game = false;
