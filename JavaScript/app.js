@@ -5,13 +5,14 @@ window.addEventListener("keydown", function(e) {
 }, false);
 let game = true;
 let score = 0;
-let gameSpeed = 1;
+let gameSpeed = 1.5;
 const bird = {
     x: 1,
     y: 5,
 }
 $('#start-game').on('click', (e)=>{
     (e.currentTarget).remove();
+    $('body').append("<div class='bottom'></div>")
     makeBoard();
     makeBird();
     $('body').keydown((e)=>{
@@ -27,6 +28,11 @@ $('#start-game').on('click', (e)=>{
             createBar();
         }
     },3000/gameSpeed)
+    setTimeout(()=>{setInterval(()=>{
+        if(game){
+            createCoin();
+        }
+    },3000/gameSpeed)},1500/gameSpeed) 
     setInterval(()=>{
         scoreIncrease();
         $('.score').text(`score: ${score}`);
@@ -43,7 +49,12 @@ const gameOver = () => {
     if($('#bird').hasClass('dodge-bar')){
         game = false;
         $('.game').empty();
-        $('.game').append(`<h1>YOU LOSE SUCKER</h1>`)
+        $('.game').append(`<h1>Game Over!</h1>`)
+        $('.game').append(`<h2>your score: ${score}</h2>`)
+        $('.game').append(`<button class='retry'>retry?</button>`)
+        $('.retry').on('click', ()=>{
+            window.location.reload();
+        })
     } 
 }
 const makeBird = () => {
@@ -64,7 +75,7 @@ const createBar = () =>{
     const bar = new DodgeBar(26, Math.ceil(Math.random()*10))
     for (let i = 0; i < 10; i++){
         if((i+1)!== bar.hole){ 
-            $(`.square-${bar.x}-${i+1}`).removeClass('hole');
+            $(`.square-${bar.x}-${i+1}`).removeClass('blank');
             $(`.square-${bar.x}-${i+1}`).addClass('dodge-bar');
         } else {
             $(`.square-${bar.x}-${i+1}`).addClass('hole');
@@ -74,13 +85,25 @@ const createBar = () =>{
         if(bar.x > 0){
             bar.move();
             gameOver();
-    }}, 600/gameSpeed)      
+    }}, 600/gameSpeed)    
+}
+const createCoin = () =>{
+    const coin = new Coin(Math.ceil(Math.random()*10))
+    $(`.square-${coin.x}-${coin.y}`).removeClass('blank');
+    $(`.square-${coin.x}-${coin.y}`).addClass('coin');
+    setInterval(()=>{
+        if(coin.x > 0){
+            coin.move();
+    }}, 600/gameSpeed)
 }
 const scoreIncrease = () => {
     if($('#bird').hasClass('hole')){
         score++;
-        console.log('iouef');
-    }    
+    } 
+    if($('#bird').hasClass('coin')){
+        score+= 5;
+    } 
+        
 }
 const moveUp = () => {
     if(bird.y < 10){
@@ -118,6 +141,18 @@ class DodgeBar  {
                 $(`.square-${this.x}-${i+1}`).addClass('hole');
             }
         }   
+    } 
+}
+class Coin {
+    constructor(y){
+        this.y = y;
+        this.x = 26;
+    }
+    move(){
+        this.x--;
+        $(`.square-${this.x + 1}-${this.y}`).removeClass('coin');
+        $(`.square-${this.x + 1}-${this.y}`).addClass('blank');
+        $(`.square-${this.x}-${this.y}`).addClass('coin');    
     } 
 }
 
