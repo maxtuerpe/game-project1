@@ -5,10 +5,12 @@ window.addEventListener("keydown", function(e) {
 }, false);
 let game = true;
 let score = 0;
-let gameSpeed = 1.5;
+let points = 0;
+let gameSpeed = 3;
 const bird = {
     x: 1,
     y: 5,
+    missles: 3,
 }
 $('#start-game').on('click', (e)=>{
     (e.currentTarget).remove();
@@ -23,34 +25,35 @@ $('#start-game').on('click', (e)=>{
         if(e.keyCode === 40){
             moveDown();
     }});
+    $('body').keydown((e)=>{
+        if(e.keyCode === 32){
+            fireMissle();
+    }});
     setInterval(()=>{
         if(game){
             createBar();
         }
-    },3000/gameSpeed)
+    },5000/gameSpeed)
+    setInterval(()=>{
+        
+    })
     setTimeout(()=>{setInterval(()=>{
         if(game){
             createCoin();
         }
-    },3000/gameSpeed)},1500/gameSpeed) 
+    },5000/gameSpeed)},2500/gameSpeed) 
     setInterval(()=>{
-        scoreIncrease();
-        $('.score').text(`score: ${score}`);
-    }, 600/gameSpeed)
-    setInterval(()=>{
-        setTimeout (levelUp, );
-    },30000)
-       
+
+        points = Math.ceil(score)
+        $('.score').text(`score: ${points}`);
+    }, 10/gameSpeed)
 }) 
-const levelUp = () => {
-    gameSpeed+= .2;
-}
 const gameOver = () => {
-    if($('#bird').hasClass('dodge-bar')){
+    if($('#bird').hasClass('box')){
         game = false;
         $('.game').empty();
         $('.game').append(`<h1>Game Over!</h1>`)
-        $('.game').append(`<h2>your score: ${score}</h2>`)
+        $('.game').append(`<h2>your score: ${points}</h2>`)
         $('.game').append(`<button class='retry'>retry?</button>`)
         $('.retry').on('click', ()=>{
             window.location.reload();
@@ -68,42 +71,57 @@ const makeBoard = () => {
             gameSquare.addClass('square')
             gameSquare.addClass(`square-${x}-${y}`)
             $(`.game-column-${x}`).append(gameSquare)
+            // setInterval(explosion, 1);
         }
     }
 }
-const createBar = () =>{
-    const bar = new DodgeBar(26, Math.ceil(Math.random()*10))
+const createBar = () => {
+    const bar = new Bar(25, Math.ceil(Math.random()*10))
     for (let i = 0; i < 10; i++){
         if((i+1)!== bar.hole){ 
             $(`.square-${bar.x}-${i+1}`).removeClass('blank');
-            $(`.square-${bar.x}-${i+1}`).addClass('dodge-bar');
+            $(`.square-${bar.x}-${i+1}`).addClass('box');
         } else {
             $(`.square-${bar.x}-${i+1}`).addClass('hole');
         }
     }
     setInterval(()=>{
+        for (let i = 0; i < 10; i++){
+            if($(`.square-${bar.x}-${i+1}`).hasClass('missle')){
+                $(`.square-${bar.x}-${i+1}`).removeClass('box');
+                $(`.square-${bar.x}-${i+1}`).addClass('hole');
+            }
+        }
+    }, 1);
+    setInterval(()=>{
         if(bar.x > 0){
             bar.move();
             gameOver();
-    }}, 600/gameSpeed)    
+    }}, 500/gameSpeed);
 }
-const createCoin = () =>{
+const createCoin = () => {
     const coin = new Coin(Math.ceil(Math.random()*10))
     $(`.square-${coin.x}-${coin.y}`).removeClass('blank');
     $(`.square-${coin.x}-${coin.y}`).addClass('coin');
     setInterval(()=>{
         if(coin.x > 0){
             coin.move();
-    }}, 600/gameSpeed)
+    }}, 500/gameSpeed)
+    setInterval(()=>{
+        coin.score();
+        $('.game').css('background-image', 'url("https://i.ytimg.com/vi/Sv8HPkt-RaY/maxresdefault.jpg")')
+    }, 50)
 }
-const scoreIncrease = () => {
-    if($('#bird').hasClass('hole')){
-        score++;
-    } 
-    if($('#bird').hasClass('coin')){
-        score+= 5;
-    } 
-        
+const fireMissle = () => {
+    if (bird.missles > 0){
+        const missle = new Missle(bird.y);
+        $(`.square-${missle.x}-${missle.y}`).addClass('missle');
+        setInterval(()=>{
+            missle.move();
+            missle.destroy();
+        }, 50);
+        bird.missles--;
+    }
 }
 const moveUp = () => {
     if(bird.y < 10){
@@ -123,25 +141,25 @@ const moveDown = () => {
         $(`.square-1-${bird.y}`).attr('id', 'bird');
     }
 }
-class DodgeBar  { 
+class Bar  { 
     constructor( x, hole){
     this.x = x;
     this.hole = hole;
     } 
-    move(){
+    move(){  
         this.x--;
         for (let i = 0; i < 10; i++){
-            if((i+1)!== this.hole){
-                $(`.square-${this.x + 1}-${i+1}`).removeClass('dodge-bar');
+            if($(`.square-${this.x + 1}-${i+1}`).hasClass('box')){
+                $(`.square-${this.x + 1}-${i+1}`).removeClass('box');
                 $(`.square-${this.x + 1}-${i+1}`).addClass('blank');
-                $(`.square-${this.x}-${i+1}`).addClass('dodge-bar');
-            } if((i+1)=== this.hole){
+                $(`.square-${this.x}-${i+1}`).addClass('box');
+            } if($(`.square-${this.x + 1}-${i+1}`).hasClass('hole')){
                 $(`.square-${this.x + 1}-${i+1}`).removeClass('hole');
                 $(`.square-${this.x + 1}-${i+1}`).addClass('blank');
                 $(`.square-${this.x}-${i+1}`).addClass('hole');
             }
         }   
-    } 
+    }
 }
 class Coin {
     constructor(y){
@@ -153,8 +171,41 @@ class Coin {
         $(`.square-${this.x + 1}-${this.y}`).removeClass('coin');
         $(`.square-${this.x + 1}-${this.y}`).addClass('blank');
         $(`.square-${this.x}-${this.y}`).addClass('coin');    
+    }
+    score(){
+        if($('#bird').hasClass('coin')){ 
+            $('.game').css('background-image', 'url("../img/CRAZY-FACE.jpg")')
+            score+= .03;
+            return;
+        }
+    }      
+} 
+class Missle {
+    constructor(y, ){
+        this.x = 2;
+        this.y = y; 
+        this.active = true; 
+    }
+    move(){
+        this.x++;
+        if(this.active){
+            $(`.square-${this.x - 1}-${this.y}`).removeClass('missle');
+            $(`.square-${this.x - 1}-${this.y}`).addClass('blank');
+            $(`.square-${this.x}-${this.y}`).addClass('missle');
+        } else {
+            $(`.square-${this.x - 1}-${this.y}`).removeClass('missle');
+        } 
+    }
+    destroy(){
+        if($(`.square-${this.x}-${this.y}`).hasClass('box')){
+            this.active = false;
+        }
     } 
 }
+
+
+
+
 
 
 
