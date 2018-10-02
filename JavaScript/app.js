@@ -3,8 +3,9 @@ window.addEventListener("keydown", function(e) {
         e.preventDefault();
     }
 }, false);
-
+let game = true;
 let score = 0;
+let gameSpeed = 1;
 const bird = {
     x: 1,
     y: 5,
@@ -20,17 +21,30 @@ $('#start-game').on('click', (e)=>{
     $('body').keydown((e)=>{
         if(e.keyCode === 40){
             moveDown();
-    }}); 
-    setInterval(createBar, 3000)
-    
-    $('.score').text(`score: ${score}`);
+    }});
+    setInterval(levelUp, 10000) 
+    setInterval(()=>{
+        if(game){
+            createBar();
+        }
+    },3000/gameSpeed)
+    setInterval(()=>{
+        scoreIncrease();
+        $('.score').text(`score: ${score}`);
+    }, 600/gameSpeed)
        
 }) 
+const levelUp = () => {
+    if (score % 5 === 0){
+        gameSpeed+= 3;
+    }
+}
+
 const gameOver = () => {
     if($('#bird').hasClass('dodge-bar')){
         game = false;
         $('.game').empty();
-        $('game').append(``)
+        $('.game').append(`<h1>YOU LOSE SUCKER</h1>`)
     } 
 }
 const makeBird = () => {
@@ -60,16 +74,21 @@ const createBar = () =>{
     setInterval(()=>{
         if(bar.x > 0){
             bar.move();
-        } else 
-       
-        gameOver();
-    }, 600) 
+            gameOver();
+    }}, 600/gameSpeed)      
+}
+const scoreIncrease = () => {
+    if($('#bird').hasClass('hole')){
+        score++;
+        console.log('iouef');
+    }    
 }
 const moveUp = () => {
     if(bird.y < 10){
         const currentSquare = $('#bird');
         currentSquare.removeAttr('id');
         bird.y++;
+        $(`.square-1-${bird.y}`).removeClass('hole');
         $(`.square-1-${bird.y}`).attr('id', 'bird');
     }
 }
@@ -78,6 +97,7 @@ const moveDown = () => {
         const currentSquare = $('#bird');
         currentSquare.removeAttr('id');
         bird.y--;
+        $(`.square-1-${bird.y}`).removeClass('hole');
         $(`.square-1-${bird.y}`).attr('id', 'bird');
     }
 }
@@ -90,11 +110,14 @@ class DodgeBar  {
         this.x--;
         for (let i = 0; i < 10; i++){
             if((i+1)!== this.hole){
-                $(`.square-${this.x + 1}-${i+1}`).removeClass('dodge-bar');;
-                $(`.square-${this.x + 1}-${i+1}`).addClass('hole');;
-                $(`.square-${this.x}-${i+1}`).removeClass('hole');;
+                $(`.square-${this.x + 1}-${i+1}`).removeClass('dodge-bar');
+                $(`.square-${this.x + 1}-${i+1}`).addClass('blank');
                 $(`.square-${this.x}-${i+1}`).addClass('dodge-bar');
-            }  
+            } if((i+1)=== this.hole){
+                $(`.square-${this.x + 1}-${i+1}`).removeClass('hole');
+                $(`.square-${this.x + 1}-${i+1}`).addClass('blank');
+                $(`.square-${this.x}-${i+1}`).addClass('hole');
+            }
         }   
     } 
 }
