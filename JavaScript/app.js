@@ -6,7 +6,7 @@ window.addEventListener("keydown", function(e) {
 let game = true;
 let score = 0;
 let points = 0;
-let gameSpeed = 3.5;
+let gameSpeed = 4.5;
 const bird = {
     x: 5,
     y: 5,
@@ -112,7 +112,7 @@ const createCoin = () => {
     }, 500/gameSpeed)
     setInterval(()=>{
         coin.score();
-    }, 50)
+    }, 5)
 }
 const fireMissle = () => {
     if (bird.missles > 0){

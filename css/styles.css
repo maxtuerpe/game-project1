@@ -3,6 +3,8 @@ h1 {
     border-width: 5px;
     border-color: white;
     display: inline;
+    border-radius: 1em;
+    padding: .2em;
 } 
 
 header {
@@ -27,6 +29,7 @@ body {
 .board {
     bottom: 12%;
     width: 100%;
+    text-align: center;
 }
 .title{
     margin-top: 20%;
@@ -48,21 +51,30 @@ body {
     background-size: 100%;
 }
 button {
-    margin: 20% 45% 45% 45%;
-    width: 10%;
-    height: 10%;
+    display: inline-block;
+    height: 50px;
+    width: 100px;
+    position:absolute;
+    margin-left:auto;
+    margin-right:auto;
+    left: 0; 
+    right: 0;
+    margin-top: 10em;
+    border-radius: 1.5em;
+}
+.retry {
+    margin-top: 10em;
 }
 .game-over {
-    margin-left: 42.5%;
+    display: inline-block;
+    margin-left:auto;
+    margin-right:auto;
+    left: 0; 
+    right: 0;
 }
 .coin{
     background-image: url("../img/up-arrow.gif");
     background-size: 100%;
-}
-.sparkle {
-    background-image: url('../img/sparkle.gif');
-    background-size: 100%;
-
 }
 .missle {
     background-image: url('../img/bullet.png');
