@@ -8,7 +8,7 @@ let score = 0;
 let points = 0;
 let gameSpeed = 2;
 const bird = {
-    x: 1,
+    x: 3,
     y: 5,
     missles: 100,
 }
@@ -63,7 +63,7 @@ const gameOver = () => {
     } 
 }
 const makeBird = () => {
-    $('.square-1-5').attr('id', 'bird');
+    $(`.square-${bird.x}-${bird.y}`).attr('id', 'bird');
 }
 const makeBoard = () => {
     for(let x = 1; x < 26; x++){
@@ -105,14 +105,12 @@ const createCoin = () => {
     const coin = new Coin(Math.ceil(Math.random()*10))
     $(`.square-${coin.x}-${coin.y}`).removeClass('blank');
     $(`.square-${coin.x}-${coin.y}`).addClass('coin');
-    if (coin.active){
-        setInterval(()=>{
-            if(coin.x > 0){
-                coin.move();
-                coin.score();
-            }
-        }, 500/gameSpeed)
-    }
+    setInterval(()=>{
+        if(coin.x > 0){
+            coin.move();
+            coin.score();
+        }
+    }, 500/gameSpeed)
 }
 const fireMissle = () => {
     if (bird.missles > 0){
@@ -130,8 +128,8 @@ const moveUp = () => {
         const currentSquare = $('#bird');
         currentSquare.removeAttr('id');
         bird.y++;
-        $(`.square-1-${bird.y}`).removeClass('hole');
-        $(`.square-1-${bird.y}`).attr('id', 'bird');
+        $(`.square-${bird.x}-${bird.y}`).removeClass('hole');
+        $(`.square-${bird.x}-${bird.y}`).attr('id', 'bird');
     }
 }
 const moveDown = () => {
@@ -139,8 +137,8 @@ const moveDown = () => {
         const currentSquare = $('#bird');
         currentSquare.removeAttr('id');
         bird.y--;
-        $(`.square-1-${bird.y}`).removeClass('hole');
-        $(`.square-1-${bird.y}`).attr('id', 'bird');
+        $(`.square-${bird.x}-${bird.y}`).removeClass('hole');
+        $(`.square-${bird.x}-${bird.y}`).attr('id', 'bird');
     }
 }
 class Bar  { 
@@ -170,19 +168,19 @@ class Coin {
         this.active = true;
     }
     move(){
+        $(`.square-${this.x}-${this.y}`).removeClass('coin');
         if(this.active){
             this.x--;
-            $(`.square-${this.x + 1}-${this.y}`).removeClass('coin');
             $(`.square-${this.x + 1}-${this.y}`).addClass('blank');
             $(`.square-${this.x}-${this.y}`).addClass('coin');
         }
             
     }
     score(){
-        if($(`.square-${this.x + 1}-${this.y}`)[0].hasAttribute('id', 'bird')){ 
+        if($(`.square-${this.x}-${this.y}`)[0].hasAttribute('id', 'bird')){ 
             console.log('hit coin');
             score++;
-            $(`.square-${this.x + 1}-${this.y}`).removeClass('coin');
+            $(`.square-${this.x}-${this.y}`).removeClass('coin');
             this.active = false;
             
         }

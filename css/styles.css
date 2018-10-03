@@ -27,7 +27,6 @@ body {
 .board {
     bottom: 12%;
     width: 100%;
-    border-style: dashed;
 }
 .title{
     margin-top: 20%;
