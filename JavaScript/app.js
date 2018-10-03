@@ -6,9 +6,9 @@ window.addEventListener("keydown", function(e) {
 let game = true;
 let score = 0;
 let points = 0;
-let gameSpeed = 2;
+let gameSpeed = 3.5;
 const bird = {
-    x: 3,
+    x: 5,
     y: 5,
     missles: 100,
 }
@@ -116,7 +116,7 @@ const createCoin = () => {
 }
 const fireMissle = () => {
     if (bird.missles > 0){
-        const missle = new Missle(bird.y);
+        const missle = new Missle(bird.x, bird.y);
         $(`.square-${missle.x}-${missle.y}`).addClass('missle');
         setInterval(()=>{
             missle.move();
@@ -188,8 +188,8 @@ class Coin {
     }      
 } 
 class Missle {
-    constructor(y, ){
-        this.x = 2;
+    constructor(x, y){
+        this.x = x;
         this.y = y; 
         this.active = true;
     }
