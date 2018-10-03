@@ -108,9 +108,11 @@ const createCoin = () => {
     setInterval(()=>{
         if(coin.x > 0){
             coin.move();
-            coin.score();
         }
     }, 500/gameSpeed)
+    setInterval(()=>{
+        coin.score();
+    }, 50)
 }
 const fireMissle = () => {
     if (bird.missles > 0){
@@ -173,17 +175,16 @@ class Coin {
             this.x--;
             $(`.square-${this.x + 1}-${this.y}`).addClass('blank');
             $(`.square-${this.x}-${this.y}`).addClass('coin');
-        }
-            
+        }       
     }
     score(){
-        if($(`.square-${this.x}-${this.y}`)[0].hasAttribute('id', 'bird')){ 
-            console.log('hit coin');
-            score++;
-            $(`.square-${this.x}-${this.y}`).removeClass('coin');
-            this.active = false;
-            
-        }
+        if(this.active){
+            if($(`.square-${this.x}-${this.y}`)[0].hasAttribute('id', 'bird')){ 
+                score++;
+                $(`.square-${this.x}-${this.y}`).removeClass('coin');
+                this.active = false;  
+            }
+        }   
     }      
 } 
 class Missle {
