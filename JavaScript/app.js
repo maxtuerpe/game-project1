@@ -6,11 +6,11 @@ window.addEventListener("keydown", function(e) {
 let game = true;
 let score = 0;
 let points = 0;
-let gameSpeed = 3;
+let gameSpeed = 3.5;
 const bird = {
     x: 1,
     y: 5,
-    missles: 3,
+    missles: 100,
 }
 $('#start-game').on('click', (e)=>{
     (e.currentTarget).remove();
@@ -19,14 +19,17 @@ $('#start-game').on('click', (e)=>{
     makeBird();
     $('body').keydown((e)=>{
         if(e.keyCode === 38){
+            $('.woosh')[0].play();
             moveUp();
     }});
     $('body').keydown((e)=>{
         if(e.keyCode === 40){
+            $('.woosh')[0].play();
             moveDown();
     }});
     $('body').keydown((e)=>{
         if(e.keyCode === 32){
+            $('.pew')[0].play();
             fireMissle();
     }});
     setInterval(()=>{
@@ -34,9 +37,6 @@ $('#start-game').on('click', (e)=>{
             createBar();
         }
     },5000/gameSpeed)
-    setInterval(()=>{
-        
-    })
     setTimeout(()=>{setInterval(()=>{
         if(game){
             createCoin();
@@ -48,6 +48,9 @@ $('#start-game').on('click', (e)=>{
         $('.score').text(`score: ${points}`);
     }, 10/gameSpeed)
 }) 
+const hardMode = () => {
+    gameSpeed+= .5;
+}
 const gameOver = () => {
     if($('#bird').hasClass('box')){
         game = false;
@@ -71,7 +74,6 @@ const makeBoard = () => {
             gameSquare.addClass('square')
             gameSquare.addClass(`square-${x}-${y}`)
             $(`.game-column-${x}`).append(gameSquare)
-            // setInterval(explosion, 1);
         }
     }
 }
@@ -88,6 +90,7 @@ const createBar = () => {
     setInterval(()=>{
         for (let i = 0; i < 10; i++){
             if($(`.square-${bar.x}-${i+1}`).hasClass('missle')){
+                $('.punch')[0].play();
                 $(`.square-${bar.x}-${i+1}`).removeClass('box');
                 $(`.square-${bar.x}-${i+1}`).addClass('hole');
             }
@@ -174,8 +177,8 @@ class Coin {
     }
     score(){
         if($('#bird').hasClass('coin')){ 
-            $('.game').css('background-image', 'url("../img/CRAZY-FACE.jpg")')
             score+= .03;
+            $('.points')[0].play();
             return;
         }
     }      
