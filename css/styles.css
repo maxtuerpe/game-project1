@@ -3,16 +3,10 @@ h1 {
     border-width: 5px;
     border-color: white;
     display: inline;
-}
-body{ 
-    background-color: saddlebrown;
-}
+} 
+
 header {
-    background-color: rgb(220, 237, 250);
     padding: 3%;
-    border-style: dotted;
-    border-width: 5px;
-    border-color: white;
 }
 .square {
     height: 3.5em;
@@ -21,9 +15,19 @@ header {
 .game-column {
     display: inline-block;
 }
+body {
+    background: linear-gradient(rgb(170, 230, 255), rgb(108, 218, 255) 87%, rgb(53, 133, 53) 88%, rgb(117, 54, 3) 93%)  no-repeat center fixed; 
+    background-size: cover;
+    /* size: contain; */
+}
 .game {
-    background-image: url("https://i.ytimg.com/vi/Sv8HPkt-RaY/maxresdefault.jpg");
-    height: 50em;
+    top: 40.75px;
+    bottom: 0px;
+}
+.board {
+    bottom: 12%;
+    width: 100%;
+    border-style: dashed;
 }
 .title{
     margin-top: 20%;
@@ -44,10 +48,13 @@ header {
     background-image: url("../img/crate.jpg");
     background-size: 100%;
 }
-#start-game {
+button {
     margin: 20% 45% 45% 45%;
     width: 10%;
     height: 10%;
+}
+.game-over {
+    margin-left: 42.5%;
 }
 .coin{
     background-image: url("../img/up-arrow.gif");

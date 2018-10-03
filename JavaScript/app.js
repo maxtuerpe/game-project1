@@ -6,7 +6,7 @@ window.addEventListener("keydown", function(e) {
 let game = true;
 let score = 0;
 let points = 0;
-let gameSpeed = 3.5;
+let gameSpeed = 2;
 const bird = {
     x: 1,
     y: 5,
@@ -41,7 +41,7 @@ $('#start-game').on('click', (e)=>{
         if(game){
             createCoin();
         }
-    },5000/gameSpeed)},2500/gameSpeed) 
+    },5000/gameSpeed)},2000/gameSpeed) 
     setInterval(()=>{
 
         points = Math.ceil(score)
@@ -54,10 +54,9 @@ const hardMode = () => {
 const gameOver = () => {
     if($('#bird').hasClass('box')){
         game = false;
-        $('.game').empty();
-        $('.game').append(`<h1>Game Over!</h1>`)
-        $('.game').append(`<h2>your score: ${points}</h2>`)
-        $('.game').append(`<button class='retry'>retry?</button>`)
+        $('.board').empty();
+        $('.board').append(`<h1 class="game-over">Game Over!</h1>`)
+        $('.board').append(`<button class='button retry'>retry?</button>`)
         $('.retry').on('click', ()=>{
             window.location.reload();
         })
@@ -68,7 +67,7 @@ const makeBird = () => {
 }
 const makeBoard = () => {
     for(let x = 1; x < 26; x++){
-        $('.game').append(`<div class='game-column game-column-${x}'></div>`)
+        $('.board').append(`<div class='game-column game-column-${x}'></div>`)
         for(let y = 10; y > 0; y--){
             const gameSquare = $('<div/>')
             gameSquare.addClass('square')
@@ -106,14 +105,14 @@ const createCoin = () => {
     const coin = new Coin(Math.ceil(Math.random()*10))
     $(`.square-${coin.x}-${coin.y}`).removeClass('blank');
     $(`.square-${coin.x}-${coin.y}`).addClass('coin');
-    setInterval(()=>{
-        if(coin.x > 0){
-            coin.move();
-    }}, 500/gameSpeed)
-    setInterval(()=>{
-        coin.score();
-        $('.game').css('background-image', 'url("https://i.ytimg.com/vi/Sv8HPkt-RaY/maxresdefault.jpg")')
-    }, 50)
+    if (coin.active){
+        setInterval(()=>{
+            if(coin.x > 0){
+                coin.move();
+                coin.score();
+            }
+        }, 500/gameSpeed)
+    }
 }
 const fireMissle = () => {
     if (bird.missles > 0){
@@ -168,18 +167,24 @@ class Coin {
     constructor(y){
         this.y = y;
         this.x = 26;
+        this.active = true;
     }
     move(){
-        this.x--;
-        $(`.square-${this.x + 1}-${this.y}`).removeClass('coin');
-        $(`.square-${this.x + 1}-${this.y}`).addClass('blank');
-        $(`.square-${this.x}-${this.y}`).addClass('coin');    
+        if(this.active){
+            this.x--;
+            $(`.square-${this.x + 1}-${this.y}`).removeClass('coin');
+            $(`.square-${this.x + 1}-${this.y}`).addClass('blank');
+            $(`.square-${this.x}-${this.y}`).addClass('coin');
+        }
+            
     }
     score(){
-        if($('#bird').hasClass('coin')){ 
-            score+= .03;
-            $('.points')[0].play();
-            return;
+        if($(`.square-${this.x + 1}-${this.y}`)[0].hasAttribute('id', 'bird')){ 
+            console.log('hit coin');
+            score++;
+            $(`.square-${this.x + 1}-${this.y}`).removeClass('coin');
+            this.active = false;
+            
         }
     }      
 } 
@@ -187,7 +192,7 @@ class Missle {
     constructor(y, ){
         this.x = 2;
         this.y = y; 
-        this.active = true; 
+        this.active = true;
     }
     move(){
         this.x++;
@@ -205,6 +210,19 @@ class Missle {
         }
     } 
 }
+
+
+
+
+
+
+
+
+$('body').keydown((e)=>{
+    if(e.keyCode === 83){
+        score+= 234;
+    }
+})
 
 
 
