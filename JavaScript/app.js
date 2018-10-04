@@ -3,17 +3,16 @@ window.addEventListener("keydown", function(e) {
         e.preventDefault();
     }
 }, false);
-let game = true;
-let score = 0;
-let points = 0;
-let gameSpeed = 4.5;
+let gameSpeed = 3.5;
 const bird = {
     x: 5,
     y: 5,
-    missles: 100,
+    missles: 20,
+    score: 0,
 }
 $('#start-game').on('click', (e)=>{
     (e.currentTarget).remove();
+    $('p').remove();
     $('body').append("<div class='bottom'></div>")
     makeBoard();
     makeBird();
@@ -33,19 +32,14 @@ $('#start-game').on('click', (e)=>{
             fireMissle();
     }});
     setInterval(()=>{
-        if(game){
-            createBar();
-        }
+        createBar();
     },5000/gameSpeed)
     setTimeout(()=>{setInterval(()=>{
-        if(game){
-            createCoin();
-        }
+        createCoin();
     },5000/gameSpeed)},2000/gameSpeed) 
     setInterval(()=>{
-
-        points = Math.ceil(score)
-        $('.score').text(`score: ${points}`);
+        $('.score').text(`score: ${bird.score}`);
+        $('.missles').text(`missles: ${bird.missles}`);
     }, 10/gameSpeed)
 }) 
 const hardMode = () => {
@@ -53,7 +47,6 @@ const hardMode = () => {
 }
 const gameOver = () => {
     if($('#bird').hasClass('box')){
-        game = false;
         $('.board').empty();
         $('.board').append(`<h1 class="game-over">Game Over!</h1>`)
         $('.board').append(`<button class='button retry'>retry?</button>`)
@@ -180,7 +173,7 @@ class Coin {
     score(){
         if(this.active){
             if($(`.square-${this.x}-${this.y}`)[0].hasAttribute('id', 'bird')){ 
-                score++;
+                bird.score++;
                 $(`.square-${this.x}-${this.y}`).removeClass('coin');
                 this.active = false;  
             }
