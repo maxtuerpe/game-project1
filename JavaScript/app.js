@@ -10,7 +10,6 @@ const backgrounds = [
     "rgb(124,253,107)",
     "rgb(148,216,255)",
 ]
-$('body').css({'background-color': backgrounds[Math.floor(Math.random() * 5)]});
 let gameSpeed = 4;
 const bird = {
     x: 5,
@@ -178,6 +177,7 @@ const makeBoard = () => {
         }
     }
 }
+$('body').css({'background-color': backgrounds[Math.floor(Math.random() * 5)]});
 $('#start-game').on('click', (e)=>{
     (e.currentTarget).remove();
     $('p').remove();
@@ -215,22 +215,13 @@ $('#start-game').on('click', (e)=>{
         $('.score').text(`score: ${bird.score}`);
         $('.missles').text(`missles: ${bird.missles}`);
     }, 10/gameSpeed)
+    $('body').keydown((e)=>{
+        if(e.keyCode === 83){
+            bird.score+= 234;
+        }
+    })
 }) 
 
-
-
-
-
-
-
-
-
-
-$('body').keydown((e)=>{
-    if(e.keyCode === 83){
-        bird.score+= 234;
-    }
-})
 
 
 
