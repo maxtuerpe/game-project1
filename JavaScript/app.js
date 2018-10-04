@@ -3,7 +3,16 @@ window.addEventListener("keydown", function(e) {
         e.preventDefault();
     }
 }, false);
-let gameSpeed = 3.5;
+const backgrounds = [
+    "rgb(226,136,17)",
+    "rgb(181,0,253)",
+    "rgb(255,72,72)",
+    "rgb(124,253,107)",
+    "rgb(148,216,255)",
+]
+$('body').css({'background-color': backgrounds[Math.floor(Math.random() * 5)]});
+let gameSpeed = 4;
+
 const bird = {
     x: 5,
     y: 5,

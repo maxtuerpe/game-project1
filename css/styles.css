@@ -29,9 +29,8 @@ header {
     display: inline-block;
 }
 body {
-    background: linear-gradient(rgb(135, 63, 218), rgb(108, 218, 255) 87%, rgb(53, 133, 53) 88%, rgb(117, 54, 3) 93%)  no-repeat center fixed; 
+    background: linear-gradient(rgba(164, 67, 255, 0), rgb(108, 218, 255) 87%, rgb(53, 133, 53) 88%, rgb(117, 54, 3) 93%) no-repeat center fixed;
     background-size: cover;
-    /* size: contain; */
 }
 .game {
     top: 40.75px;
