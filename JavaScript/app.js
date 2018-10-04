@@ -19,7 +19,7 @@ const bird = {
     fireMissle(){
         if (this.missles > 0){
             const missle = new Missle(this.x, this.y);
-            $(`.square-${missle.x}-${missle.y}`).addClass('missle');
+            missle.newMissle();
             missle.move();
             missle.destroy();
             this.missles--;
@@ -44,7 +44,7 @@ const bird = {
         }
     }
 }
-class Bar  { 
+class Bar { 
     constructor( x, hole){
     this.x = x;
     this.hole = hole;
@@ -96,6 +96,10 @@ class Coin {
         this.x = 26;
         this.active = true;
     }
+    newCoin(){
+        $(`.square-${this.x}-${this.y}`).removeClass('blank');
+        $(`.square-${this.x}-${this.y}`).addClass('coin');
+    }
     move(){
         setInterval(()=>{
             if(this.x > 0){
@@ -118,10 +122,6 @@ class Coin {
                 }
             } 
         }, 5)    
-    } 
-    newCoin(){
-        $(`.square-${this.x}-${this.y}`).removeClass('blank');
-        $(`.square-${this.x}-${this.y}`).addClass('coin');
     }     
 } 
 class Missle {
@@ -129,6 +129,9 @@ class Missle {
         this.x = x;
         this.y = y; 
         this.active = true;
+    }
+    newMissle(){
+        $(`.square-${this.x}-${this.y}`).addClass('missle');
     }
     move(){
         setInterval(()=>{
